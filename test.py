@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
@@ -69,15 +69,28 @@ for name, model in models.items():
         'Accuracy': accuracy_score(y_test, y_pred),
         'Precision': precision_score(y_test, y_pred),
         'Recall': recall_score(y_test, y_pred),
-        'F1 Score': f1_score(y_test, y_pred)
+        'F1 Score': f1_score(y_test, y_pred),
+        'Confusion Matrix': confusion_matrix(y_test, y_pred),
+        'Classification Report': classification_report(y_test, y_pred)
     }
 
 # Print model results
 for model_name, metrics in results.items():
     print(f"{model_name} Performance:")
     for metric, value in metrics.items():
-        print(f"{metric}: {value:.4f}")
+        if metric in ['Confusion Matrix', 'Classification Report']:
+            print(f"{metric}:\n{value}")
+        else:
+            print(f"{metric}: {value:.4f}")
     print()
+
+# Identified Model Flaws & Plan for Improvement
+print("\nModel Improvement Plan:")
+print("1. Data Balance: The dataset may have class imbalance, leading to biased predictions. Consider oversampling/undersampling techniques.")
+print("2. Feature Selection: Some features may not contribute significantly. Feature importance analysis can refine the model.")
+print("3. Additional Data: Incorporating user behavior data (e.g., listening duration, skips) may enhance predictive power.")
+print("4. Hyperparameter Tuning: Grid Search or Randomized Search can improve model performance.")
+print("5. Alternative Models: Exploring Gradient Boosting models like XGBoost or deep learning methods for better accuracy.")
 
 # Recommended Model (Random Forest)
 rf = RandomForestClassifier(random_state=42)
@@ -135,4 +148,3 @@ plt.legend()
 plt.grid(True)
 plt.show()
 ```
-
