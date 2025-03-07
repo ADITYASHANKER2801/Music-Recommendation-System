@@ -9,6 +9,12 @@ import seaborn as sns
 # Load the dataset
 spotify_data = pd.read_csv('music.csv')
 
+# Data Summary
+print("Dataset Summary:")
+print(spotify_data.info())
+print("First few rows:")
+print(spotify_data.head())
+
 # Drop missing values
 spotify_data_cleaned = spotify_data.dropna()
 
@@ -29,6 +35,14 @@ spotify_data_encoded = spotify_data_encoded.dropna(subset=['track_album_release_
 
 # Ensure only numeric features are included
 features_numeric = spotify_data_encoded.select_dtypes(include=[np.number])
+
+# Data Visualization
+plt.figure(figsize=(12, 6))
+sns.histplot(spotify_data_cleaned['track_popularity'], bins=30, kde=True, color='blue')
+plt.title('Distribution of Track Popularity')
+plt.xlabel('Popularity')
+plt.ylabel('Frequency')
+plt.show()
 
 # Normalize the numeric features
 scaler = StandardScaler()
@@ -66,3 +80,14 @@ plt.show()
 
 # Print the explained variance ratio of PCA
 print("Explained variance ratio of PCA:", pca.explained_variance_ratio_)
+
+# Model Evaluation
+print("Number of clusters found by K-Means:", len(set(kmeans_labels)))
+print("Number of clusters found by DBSCAN:", len(set(dbscan_labels)) - (1 if -1 in dbscan_labels else 0))
+
+# Next Steps and Improvements
+print("Next Steps:")
+print("- Tune hyperparameters for K-Means and DBSCAN (e.g., number of clusters, epsilon, min_samples)")
+print("- Experiment with additional clustering methods (e.g., Hierarchical Clustering)")
+print("- Use domain knowledge to interpret clusters and validate insights")
+print("- Incorporate more relevant features or external data sources for better clustering")
